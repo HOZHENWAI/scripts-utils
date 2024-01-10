@@ -1,0 +1,6 @@
+#Python env
+venv
+.venv
+
+# IDE
+.idea
