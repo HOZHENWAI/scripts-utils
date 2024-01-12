@@ -18,7 +18,7 @@ function Get-OwnerRepo($remoteUrl) {
     return $OwnerRepo
 }
 
-function Pull-Main-Branch($dirPath) {
+function Pull-MainBranch($dirPath) {
     Set-Location $dirPath
 
     # Check if the directory is a Git repository by checking .git hidden folder (this is not perfect)
@@ -31,12 +31,12 @@ function Pull-Main-Branch($dirPath) {
     $repoInfo = gh repo view --json defaultBranchRef --jq ".defaultBranchRef.name"
     $branchName = $repoInfo[0].ToString()
     # Get github remote url from git
-    $remote_url = git remote get-url $defaultRemoteName
+    $remoteUrl = git remote get-url $defaultRemoteName
     $remoteRepo = Get-OwnerRepo $remote_url
     gh repo sync -b $branchName -s $remoteRepo
 }
 
 Get-ChildItem -Path $directoryPath -Directory | ForEach-Object {
     $subfolderPath = $_.FullName
-    Pull-Main-Branch $subfolderPath
+    Pull-MainBranch $subfolderPath
 }

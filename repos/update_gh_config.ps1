@@ -18,7 +18,7 @@ function Get-OwnerRepo($remoteUrl) {
     return $OwnerRepo
 }
 
-function Update-Default-Repository($dirPath) {
+function Update-DefaultRepository($dirPath) {
     Set-Location $dirPath
 
     # Check if the directory is a Git repository by checking .git hidden folder (this is not perfect)
@@ -37,5 +37,5 @@ function Update-Default-Repository($dirPath) {
 
 Get-ChildItem -Path $directoryPath -Directory | ForEach-Object {
     $subfolderPath = $_.FullName
-    Update-Default-Repository $subfolderPath
+    Update-DefaultRepository $subfolderPath
 }
