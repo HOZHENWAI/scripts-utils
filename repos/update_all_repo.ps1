@@ -32,7 +32,7 @@ function Pull-MainBranch($dirPath) {
     $branchName = $repoInfo[0].ToString()
     # Get github remote url from git
     $remoteUrl = git remote get-url $defaultRemoteName
-    $remoteRepo = Get-OwnerRepo $remote_url
+    $remoteRepo = Get-OwnerRepo $remoteUrl
     gh repo sync -b $branchName -s $remoteRepo
 }
 
