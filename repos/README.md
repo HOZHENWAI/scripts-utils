@@ -1,4 +1,4 @@
-# Scripts that deals with code/repos and other.
+# Scripts that deals with code/repos and other. (works only with github)
 All scripts come in 3 flavor:
 - bash
 - powershell
@@ -7,20 +7,28 @@ Some of them are configurable on call using env variable. i.e.
 - ```VAR_NAME=value ./script_name.sh``` for linux 
 - ```$env:VAR_NAME = "value"; ./script_name.ps1```
 ## Script list
-- script that clones all repo from a user into the current directory (clone_all)
+- script that clones all repo from a user into the current directory (clone_all), note that since that the default parent repository for a fork is its parent repository.
   - usage: 
     - ```USERNAME=github_username ./clone_all.sh``` for bash
   - requires:
     - ```gh``` installed and setup up (either token with correct permissions or authenticated)
-- script that check all directories for forks of another project, update the forked branch to prepare for pull request locally
+  - note:
+    - using `gh` to clone the project will setup the default repository to the upstream which, in the case where the fork has significantly diverged from its source, may not be the one we want
+- script that, for all git directories, update the gh default repository to its forked value (given by user) and for non fork project that were not setup with gh, setup the gh default remote repository (using git remote/default is `origin`)
   - usage:
-    - ``````
+    - ```DEFAULT_REMOTE_NAME=origin DIRECTORY_PATH="." ./update_all_fork.sh```
   - requires:
-    - ```gh``` installed and setup
-- script that install pre-commit hooks to all projects that are owned
-  - usage:
-    - ``````
-  - requirements: 
+    - `git` and `gh` installed
+  - case taken into account:
+    - directory is not a git repository
+    - directory is a non forked clone of a public repository
+      - will set the `gh default repository` if not already existing (if you want to fork the repo later, you will have to replace the default and/or remote as needed)
+    - directory is a clone of an owned private/public repository
+      - will set the `gh default repository` if not already existing
+    - directory is a clone of a forked public/repository (either with `git clone` or `gh repo clone`)
+      - if `gh` was used to clone, there are two remote: the `origin` and the `upstream`, with the default repository set to the upstream
+      - if `git` was used to clone, there is only one remote: the `origin`, with no default repository
+
 
 # Installing the requirements:
 - gh:
